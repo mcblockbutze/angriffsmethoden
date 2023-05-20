@@ -5,12 +5,12 @@
 #include <openssl/sha.h>
 
 
-void encryptFileWithSHA(const std::string& filename)
+void encryptFile(const std::string& filename)
 {
     std::ifstream inputFile(filename, std::ios::binary);
     if (!inputFile)
     {
-        std::cerr << "Fehler beim Öffnen der Datei!" << std::endl;
+        std::cerr << "Failed to open File" << std::endl;
         return;
     }
 
@@ -34,7 +34,7 @@ void encryptFileWithSHA(const std::string& filename)
     std::ofstream outputFile(encryptedFilename, std::ios::binary);
     if (!outputFile)
     {
-        std::cerr << "Fehler beim Erstellen der verschlüsselten Datei!" << std::endl;
+    
         return;
     }
 
@@ -48,7 +48,7 @@ void encryptFileWithSHA(const std::string& filename)
 int main()
 {
 
-    encryptFileWithSHA("test.txt");
+    encryptFile("test.txt");
 
     return 0;
 }
