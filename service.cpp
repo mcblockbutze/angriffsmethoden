@@ -4,8 +4,10 @@
 
 using namespace std;
 
-// Funktion zur Verschlüsselung des Textinhalts mit XOR
-string encryptText(const string& text, const string& key) {
+//C++ Code zur vereinfachten Simulation einer Dateiverschlüsselung, angelehnt an die Ryuk Ransomware
+
+// Funktion zur Verschlüsselung des Datei Inhalts mit einer einfachen XOR Verschlüsselung
+string encryptFile(const string& text, const string& key) {
     string encryptedText = text;
     for (size_t i = 0; i < text.length(); i++) {
         encryptedText[i] = text[i] ^ key[i % key.length()];
@@ -14,16 +16,20 @@ string encryptText(const string& text, const string& key) {
 }
 
 int main() {
+
+    //Defintion der Eingabe und Ausgabedatei
     string inputFile = "test.txt";
     string outputFile = "encrypted.txt";
-    string key = "encryptionkey";  // Schlüssel für die XOR-Verschlüsselung
+    string key = "snldcnirhnlcsdihcirnl<dhir"; //Verschlüsselungskey für diese XOR Verschlüsselung
 
+    //Öffnen der Eingabedatei
     ifstream inputStream(inputFile);
     if (!inputStream) {
         cout << "Fehler beim Öffnen der Eingabedatei!" << endl;
         return 1;
     }
 
+    //Öffnen der Ausgabedatei
     ofstream outputStream(outputFile);
     if (!outputStream) {
         cout << "Fehler beim Öffnen der Ausgabedatei!" << endl;
@@ -35,8 +41,8 @@ int main() {
 
     inputStream.close();
 
-    // Verschlüsselung des Textinhalts
-    string encryptedContent = encryptText(fileContent, key);
+    // Verschlüsselung des Datei Inhalts
+    string encryptedContent = encryptFile(fileContent, key);
 
     // Speichern des verschlüsselten Texts in der Ausgabedatei
     outputStream << encryptedContent;
