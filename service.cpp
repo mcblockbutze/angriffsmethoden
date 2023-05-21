@@ -1,54 +1,49 @@
 #include <iostream>
 #include <fstream>
-#include <windows.h>
-#include <wincrypt.h>
-#include <openssl/sha.h>
+#include <string>
 
+using namespace std;
 
-void encryptFile(const std::string& filename)
-{
-    std::ifstream inputFile(filename, std::ios::binary);
-    if (!inputFile)
-    {
-        std::cerr << "Failed to open File" << std::endl;
-        return;
+// Funktion zur Verschlüsselung des Textinhalts mit XOR
+string encryptText(const string& text, const string& key) {
+    string encryptedText = text;
+    for (size_t i = 0; i < text.length(); i++) {
+        encryptedText[i] = text[i] ^ key[i % key.length()];
     }
-
-
-    SHA_CTX ctx;
-    SHA1_Init(&ctx);
-
-    char buffer[4096];
-    while (inputFile.read(buffer, sizeof(buffer)))
-    {
-        SHA1_Update(&ctx, buffer, inputFile.gcount());
-    }
-
-    unsigned char hash[SHA_DIGEST_LENGTH];
-    SHA1_Final(hash, &ctx);
-
-    inputFile.close();
-
-    std::string encryptedFilename = filename + ".encrypted";
-
-    std::ofstream outputFile(encryptedFilename, std::ios::binary);
-    if (!outputFile)
-    {
-    
-        return;
-    }
-
-    outputFile.write(reinterpret_cast<const char*>(hash), SHA_DIGEST_LENGTH);
-
-    outputFile.close();
+    return encryptedText;
 }
 
+int main() {
+    string inputFile = "test.txt";
+    string outputFile = "encrypted.txt";
+    string key = "encryptionkey";  // Schlüssel für die XOR-Verschlüsselung
 
+    ifstream inputStream(inputFile);
+    if (!inputStream) {
+        cout << "Fehler beim Öffnen der Eingabedatei!" << endl;
+        return 1;
+    }
 
-int main()
-{
+    ofstream outputStream(outputFile);
+    if (!outputStream) {
+        cout << "Fehler beim Öffnen der Ausgabedatei!" << endl;
+        return 1;
+    }
 
-    encryptFile("test.txt");
+    // Den gesamten Inhalt der Eingabedatei einlesen
+    string fileContent((istreambuf_iterator<char>(inputStream)), (istreambuf_iterator<char>()));
+
+    inputStream.close();
+
+    // Verschlüsselung des Textinhalts
+    string encryptedContent = encryptText(fileContent, key);
+
+    // Speichern des verschlüsselten Texts in der Ausgabedatei
+    outputStream << encryptedContent;
+
+    outputStream.close();
+
+    cout << "Der Text wurde erfolgreich verschlüsselt und in die Datei gespeichert!" << endl;
 
     return 0;
 }
